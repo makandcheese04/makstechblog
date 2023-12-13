@@ -1,0 +1,37 @@
+<div>DashBoard Page</div>
+
+{{#each usersBlogs }}
+{{> blog-template }}
+{{/each}}
+
+{{> create-blog-post }}
+
+<script>
+      const postBlogFormHandler = async (event) => {
+            event.preventDefault();
+
+            const title = document.getElementById("blogTitle").value.trim();
+            const body = document.getElementById("blogBody").value.trim();
+
+            if (title && body) {
+                  const response = await fetch("/api/users/blogs", {
+                        method: "POST",
+                        // Make a user form input or get from {{user.name}}
+                        body: JSON.stringify({ title: title, body: body }),
+                        headers: { "Content-Type": "application/json" },
+                  })
+
+                  if (response.ok) {
+                        document.location.replace("/dashboard");
+                  }
+                  else {
+                        alert(response.statusText);
+                  }
+            }
+      };
+
+      document
+            .getElementById("postBtn")
+            .addEventListener("click", postBlogFormHandler);
+
+</script>
